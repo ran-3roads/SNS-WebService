@@ -34,14 +34,12 @@
               <button class="twit-follow">팔로우</button>
             {% endif %}
             <div class="twit-content">{{twit.content}}
-              <div class="twit-emote">  
-                <img src="/images/hate.png" width="30px" alt="싫어요">
-                <button class="twit-follow">싫어요</button>
+              <div class="twit-emote"> 
+                <img id="like" src="/images/like.png" width="30px" alt="좋아요">
+                <div>{{twit.like}}</div>
+                <img id="hate" src="/images/hate.png" width="30px" alt="싫어요">
+                <div>{{twit.hate}}</div>
               </div>
-              <div class="twit-emote">
-                <img src="/images/like.png" width="30px" alt="좋아요">
-                <button class="twit-follow">좋아요</button>
-              </div> 
           </div>
             {% if twit.img %}
               <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
@@ -89,24 +87,10 @@
         }
       });
     });
-    document.querySelectorAll('.twit-emote').forEach(function(tag) {
-      tag.addEventListener('click', function() {
-        const myId = document.querySelector('#my-id');
-        if (myId) {
-          const userId = tag.parentNode.querySelector('.twit-user-id').value;
-          if (userId !== myId.value) {
-            if (confirm('좋아요?')) {
-              axios.post(`/user/${userId}/follow`)
-                .then(() => {
-                  location.reload();
-                })
-                .catch((err) => {
-                  console.error(err);
-                });
-            }
-          }
-        }
-      });
-    });
+    document.getElementById("like").addEventListener('click',like);
+    function like(){
+      alert("따봉!");
+    }
+    
   </script>
 {% endblock %}
