@@ -89,5 +89,24 @@
         }
       });
     });
+    document.querySelectorAll('.twit-emote').forEach(function(tag) {
+      tag.addEventListener('click', function() {
+        const myId = document.querySelector('#my-id');
+        if (myId) {
+          const userId = tag.parentNode.querySelector('.twit-user-id').value;
+          if (userId !== myId.value) {
+            if (confirm('좋아요?')) {
+              axios.post(`/user/${userId}/follow`)
+                .then(() => {
+                  location.reload();
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+            }
+          }
+        }
+      });
+    });
   </script>
 {% endblock %}
