@@ -35,10 +35,18 @@
             {% endif %}
             <div class="twit-content">{{twit.content}}
               <div class="twit-emote"> 
+                {% if twit.like === 0 %}
+                <img id="like" src="/images/like.png" width="30px" alt="좋아요">
+                {% else %}
                 <img id="like" src="/images/like.png" width="30px" alt="좋아요">
                 <div>{{twit.like}}</div>
+                {% endif %}
+                {% if twit.hate === 0 %}
+                <img id="hate" src="/images/hate.png" width="30px" alt="싫어요">
+                {% else %}
                 <img id="hate" src="/images/hate.png" width="30px" alt="싫어요">
                 <div>{{twit.hate}}</div>
+                {% endif %}
               </div>
           </div>
             {% if twit.img %}
@@ -89,8 +97,25 @@
     });
     document.getElementById("like").addEventListener('click',like);
     function like(){
+      axios.post(`/post/like`)
+                .then(() => {
+                  location.reload();
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
       alert("따봉!");
     }
-    
+    document.getElementById("hate").addEventListener('click',hate);
+    function hate(){
+      axios.post(`/post/hate`)
+                .then(() => {
+                  location.reload();
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+      alert("싫어용!");
+    }
   </script>
 {% endblock %}
