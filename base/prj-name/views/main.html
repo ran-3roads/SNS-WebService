@@ -34,10 +34,14 @@
               <button class="twit-follow">팔로우</button>
             {% endif %}
             <div class="twit-content">{{twit.content}}
-              <img src="/images/like.png" width="30px" alt="섬네일">
-              <button class="twit-follow">{{twit.likecount}}</button>
-            <img src="/images/hate.png" width="30px" alt="섬네일">
-            <button class="twit-follow">{{twit.hatecount}}</button>
+              <div class="twit-emote">  
+                <img src="/images/hate.png" width="30px" alt="싫어요">
+                <button class="twit-follow">싫어요</button>
+              </div>
+              <div class="twit-emote">
+                <img src="/images/like.png" width="30px" alt="좋아요">
+                <button class="twit-follow">좋아요</button>
+              </div> 
           </div>
             {% if twit.img %}
               <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
