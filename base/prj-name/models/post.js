@@ -20,6 +20,11 @@ module.exports = class Post extends Sequelize.Model {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0,
+      },
+      sinceDate: { //작성한 날짜
+        type: Sequelize.DATEONLY,
+        allowNull: false,
+        defaultValue: new Date()
       }
     }, {
       sequelize,
