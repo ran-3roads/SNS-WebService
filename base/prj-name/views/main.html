@@ -31,9 +31,14 @@
             <input type="hidden" value="{{twit.id}}" class="twit-id">
             <div class="twit-author">{{twit.User.nick}}</div>
             {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
-              <button class="twit-follow">팔로우하기</button>
+              <button class="twit-follow">팔로우</button>
             {% endif %}
-            <div class="twit-content">{{twit.content}}</div>
+            <div class="twit-content">{{twit.content}}
+              <img src="/images/like.png" width="30px" alt="섬네일">
+              <button class="twit-follow">{{twit.likecount}}</button>
+            <img src="/images/hate.png" width="30px" alt="섬네일">
+            <button class="twit-follow">{{twit.hatecount}}</button>
+          </div>
             {% if twit.img %}
               <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
             {% endif %}
