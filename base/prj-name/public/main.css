@@ -101,6 +101,13 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
 }
 .twit-emote{
   float: right;
+}
+.like{
+  color: white;
+  background: white;
+  border: none;
+}
+.hate{
   color: white;
   background: white;
   border: none;
