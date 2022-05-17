@@ -105,6 +105,12 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
   background: white;
   border: none;
 }
+.twit-since{
+  float: right;
+  color: black;
+  background: white;
+  border: none;
+}
 .twit-img { text-align: center; }
 .twit-img img { max-width: 75%; }
 .error-message { color: red; font-weight: bold; }
