@@ -1,6 +1,7 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const { Post, User, Hashtag } = require('../models');
+const { Post, User, Hashtag, Comment } = require('../models');
+const Op = require('sequelize').Op
 
 const router = express.Router();
 
@@ -23,22 +24,43 @@ router.get('/join', isNotLoggedIn, (req, res) => {
 router.get('/', async (req, res, next) => {
   try {
     const posts = await Post.findAll({
-      include: {
+      include: [{
         model: User,
         attributes: ['id', 'nick'],
-      },
+      }, {
+        model: Comment,
+        include: [{
+          model: User,
+          attributes: ['id', 'nick'],
+        }],
+        //        attributes: [], 사용해보고 필요없느거 있으면 그때 제외
+        order: [['createdAt', 'DESC']],
+      }],
       order: [['createdAt', 'DESC']],
     });
-    res.render('main', {
-      title: 'prj-name',
-      twits: posts,
-    });
+    if (req.user != undefined) {
+      const imgPosts = await Post.findAll({
+        where: {img:{[Op.ne]: null},UserId: req.user.id},
+        order: [['createdAt', 'DESC']],
+        attributes: ['img','id'],
+      });
+      res.render('main', {
+        title: 'prj-name',
+        twits: posts,
+        imgPosts: imgPosts,
+      });
+    }
+    else {
+      res.render('main', {
+        title: 'prj-name',
+        twits: posts,
+      });
+    }
   } catch (err) {
     console.error(err);
     next(err);
   }
 });
-
 
 
 
@@ -78,6 +100,42 @@ router.get('/since', async (req, res, next) => {
     return res.render('main', {
       title: `${query} | NodeBird`,
       twits: posts,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+
+router.get('/img', async (req, res, next) => {
+  const query = req.query.post;
+  if (!query) {
+    return res.redirect('/');
+  }
+  try {
+    Post.findAll({
+      include
+    })
+    const post = await Post.findOne(
+      { include: [{
+        model: User,
+        attributes: ['id', 'nick'],
+      }, {
+        model: Comment,
+        include: [{
+          model: User,
+          attributes: ['id', 'nick'],
+        }],
+        //        attributes: [], 사용해보고 필요없느거 있으면 그때 제외
+        order: [['createdAt', 'DESC']],
+      }],
+        where : {id:query},
+      });
+    
+
+    return res.render('main', {
+      title: `${query} | NodeBird`,
+      twits: post,
     });
   } catch (error) {
     console.error(error);
