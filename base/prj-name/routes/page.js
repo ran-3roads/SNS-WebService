@@ -1,9 +1,9 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const { Post, User, Hashtag } = require('../models');
+const { post } = require('./post');
 
 const router = express.Router();
-
 router.use((req, res, next) => {
   res.locals.user = req.user;
   res.locals.followerCount = req.user ? req.user.Followers.length : 0;
@@ -21,8 +21,12 @@ router.get('/join', isNotLoggedIn, (req, res) => {
 });
 
 router.get('/', async (req, res, next) => {
+  let followerList = [];
+  if(req.user !=null){
+    followerList=req.user.Followers.map(f => f.id);
+  }
   try {
-    const posts = await Post.findAll({
+     let posts = await Post.findAll({
       include: {
         model: User,
         attributes: ['id', 'nick'],

@@ -25,6 +25,10 @@ module.exports = class Post extends Sequelize.Model {
         type: Sequelize.DATEONLY,
         allowNull: false,
         defaultValue: new Date()
+      },
+      scope: {
+        type: Sequelize.STRING(50),
+        allowNull: true,
       }
     }, {
       sequelize,

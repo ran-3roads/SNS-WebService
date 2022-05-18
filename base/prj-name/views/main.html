@@ -1,69 +1,102 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <div class="timeline">
-      {% if user %}
-        <div>
-          <form id="twit-form" action="/post" method="post" enctype="multipart/form-data">
-            <div class="input-group">
-              <textarea id="twit" name="content" maxlength="140"></textarea>
-            </div>
-            <div class="img-preview">
-              <img id="img-preview" src="" style="display: none;" width="250" alt="미리보기">
-              <input id="img-url" type="hidden" name="url">
-            </div>
-            <div>
-              <label id="img-label" for="img">사진 업로드</label>
-              <input id="img" type="file" accept="image/*">
-              <button id="twit-btn" type="submit" class="btn">짹짹</button>
-            </div>
-          </form>
-        </div>
-      {% endif %}
-      <div class="twits">
-        <form id="since-form" action="/since">
-          <input
-          type="date"
-          name="sinceDate"
-          placeholder="date placeholder"
-          />
-          <button class="btn">검색</button>
-        </form>
-        <form id="hashtag-form" action="/hashtag">
-          <input type="text" name="hashtag" placeholder="태그 검색">
-          <button class="btn">검색</button>
-        </form>
-        {% for twit in twits %}
-          <div class="twit">
-            <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
-            <input type="hidden" value="{{twit.id}}" class="twit-id">
-            <div class="twit-author">{{twit.User.nick}}</div>
-            {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
-              <button class="twit-follow">팔로우</button>
-            {% endif %}
-            <div class="twit-content">{{twit.content}}
-              <div class="twit-emote"> 
-                {% if twit.like === 0 %}
-                <img class="like" src="/images/like.png" width="30px" alt="좋아요">
-                {% else %}
-                <img class="like" src="/images/like.png" width="30px" alt="좋아요">
-                <div>{{twit.like}}</div>
-                {% endif %}
-                {% if twit.hate === 0 %}
-                <img class="hate" src="/images/hate.png" width="30px" alt="싫어요">
-                {% else %}
-                <img class="hate" src="/images/hate.png" width="30px" alt="싫어요">
-                <div>{{twit.hate}}</div>
-                {% endif %}
-              </div>
-          </div>
-            {% if twit.img %}
-              <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
-            {% endif %}
-          </div>
-        {% endfor %}
+<div class="timeline">
+  {% if user %}
+  <div>
+    <form id="twit-form" action="/post" method="post" enctype="multipart/form-data">
+      <div class="input-group">
+        <textarea id="twit" name="content" maxlength="140"></textarea>
       </div>
+      <div class="img-preview">
+        <img id="img-preview" src="" style="display: none;" width="250" alt="미리보기">
+        <input id="img-url" type="hidden" name="url">
+      </div>
+      <div>
+        <label id="img-label" for="img">사진 업로드</label>
+        <input id="img" type="file" accept="image/*">
+        <button id="twit-btn" type="submit" class="btn">짹짹</button>
+        <input type="radio" id="PUBLIC" name="scope" value="PUBLIC" checked="checked" />
+        <label for="PUBLIC">공개</label>
+        <input type="radio" id="PRIVATE" name="scope" value="PRIVATE" />
+        <label for="PRIVATE">비공개</label>
+      </div>
+    </form>
+  </div>
+  {% endif %}
+  <div class="twits">
+    <form id="since-form" action="/since">
+      <input type="date" name="sinceDate" placeholder="date placeholder" />
+      <button class="btn">검색</button>
+    </form>
+    <form id="hashtag-form" action="/hashtag">
+      <input type="text" name="hashtag" placeholder="태그 검색">
+      <button class="btn">검색</button>
+    </form>
+    {% for twit in twits %}
+    {% if twit.scope === "PUBLIC" %}
+    <div class="twit">
+      <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
+      <input type="hidden" value="{{twit.id}}" class="twit-id">
+      <div class="twit-author">{{twit.User.nick}}</div>
+      {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
+      <button class="twit-follow">팔로우</button>
+      {% endif %}
+      <div class="twit-content">{{twit.content}}
+        <div class="twit-emote">
+          {% if twit.like === 0 %}
+          <img class="like" src="/images/like.png" width="30px" alt="좋아요">
+          {% else %}
+          <img class="like" src="/images/like.png" width="30px" alt="좋아요">
+          <div>{{twit.like}}</div>
+          {% endif %}
+          {% if twit.hate === 0 %}
+          <img class="hate" src="/images/hate.png" width="30px" alt="싫어요">
+          {% else %}
+          <img class="hate" src="/images/hate.png" width="30px" alt="싫어요">
+          <div>{{twit.hate}}</div>
+          {% endif %}
+        </div>
+      </div>
+      {% if twit.img %}
+      <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
+      {% endif %}
+    {% endif %}
     </div>
+    {% if twit.scope === "PRIVATE" %}
+    {%  if followerIdList.includes(twit.User.id) or twit.User.id == user.id %}
+    <div class="twit">
+      <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
+      <input type="hidden" value="{{twit.id}}" class="twit-id">
+      <div class="twit-author">{{twit.User.nick}}</div>
+      {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
+      <button class="twit-follow">팔로우</button>
+      {% endif %}
+      <div class="twit-content">{{twit.content}}
+        <div class="twit-emote">
+          {% if twit.like === 0 %}
+          <img class="like" src="/images/like.png" width="30px" alt="좋아요">
+          {% else %}
+          <img class="like" src="/images/like.png" width="30px" alt="좋아요">
+          <div>{{twit.like}}</div>
+          {% endif %}
+          {% if twit.hate === 0 %}
+          <img class="hate" src="/images/hate.png" width="30px" alt="싫어요">
+          {% else %}
+          <img class="hate" src="/images/hate.png" width="30px" alt="싫어요">
+          <div>{{twit.hate}}</div>
+          {% endif %}
+        </div>
+      </div>
+      {% if twit.img %}
+      <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
+      {% endif %}
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
 
 {% block script %}
@@ -101,7 +134,8 @@
               });
           }
         }
-      }});
+      }
+    });
     tag.parentNode.querySelector(".hate").addEventListener('click', function () {
       axios.post(`/post/hate`, {
         userId: userId,
