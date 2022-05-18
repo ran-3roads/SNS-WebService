@@ -3,8 +3,9 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const { Post, User, Hashtag, Comment } = require('../models');
 const Op = require('sequelize').Op
 
-const router = express.Router();
 
+
+const router = express.Router();
 router.use((req, res, next) => {
   res.locals.user = req.user;
   res.locals.followerCount = req.user ? req.user.Followers.length : 0;
