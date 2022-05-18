@@ -35,7 +35,7 @@
     </form>
     {% for twit in twits %}
     {% if twit.scope === "PUBLIC" %}
-    <div class="twit">
+    <div class="twit" id="twitcontent">
       <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
       <input type="hidden" value="{{twit.id}}" class="twit-id">
       <div class="twit-author">{{twit.User.nick}}</div>
@@ -62,7 +62,7 @@
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
     </div>
-    <div class="twit-comment" id="{{twit.id}}comment">
+    <div class="twit-comment" id="{{twit.id}}comment" style="display:none;">
               {% for cmt in twit.Comments%}
               <div class="comment">
                 <input type="hidden" value="{{cmt.User.id}}" class="comment-user-id">
@@ -78,7 +78,7 @@
               <form class="comment-form" action="/post/comment" method="post">
                 <input name="postId" type="hidden" value="{{twit.id}}" class="twit-id">
                 <div class="comment-input-group">
-                  <div class="twit-author">{{user.nick}}</div><textarea class="comment" name="content" maxlength="140"></textarea>
+                  <div class="twit-author">{{user.nick}}</div><textarea class="commentwrite" name="content" maxlength="140"></textarea>
                 </div>
                 <div>
                   <button id="comment-btn" type="submit" class="btn">답글작성</button>
@@ -133,7 +133,7 @@
               <form class="comment-form" action="/post/comment" method="post">
                 <input name="postId" type="hidden" value="{{twit.id}}" class="twit-id">
                 <div class="comment-input-group">
-                  <div class="twit-author">{{user.nick}}</div><textarea class="comment" name="content" maxlength="140"></textarea>
+                  <div class="twit-author">{{user.nick}}</div><textarea class="commentwrite" name="content" maxlength="140"></textarea>
                 </div>
                 <div>
                   <button id="comment-btn" type="submit" class="btn">답글작성</button>
@@ -152,6 +152,20 @@
 
 {% block script %}
 <script>
+   document.querySelectorAll('.twit').forEach(function (tag) {
+       const twitid=tag.querySelector('.twit-id').value
+    tag.addEventListener('click', function () {
+        if(document.getElementById(twitid+'comment').style.display=='none')
+        {
+          document.getElementById(twitid+'comment').style.display=''
+        }
+        else{
+          document.getElementById(twitid+'comment').style.display='none'
+        }
+      });
+  });
+
+
   if (document.getElementById('img')) {
     document.getElementById('img').addEventListener('change', function (e) {
       const formData = new FormData();
