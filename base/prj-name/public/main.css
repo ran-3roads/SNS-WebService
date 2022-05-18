@@ -99,19 +99,6 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
   font-size: 12px;
   cursor: pointer;
 }
-.twit-emote{
-  float: right;
-}
-.like{
-  color: white;
-  background: white;
-  border: none;
-}
-.hate{
-  color: white;
-  background: white;
-  border: none;
-}
 .twit-img { text-align: center; }
 .twit-img img { max-width: 75%; }
 .error-message { color: red; font-weight: bold; }
@@ -126,3 +113,69 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
   display:inline
 }
 footer { text-align: center; }
+
+/*
+-----------------------------------------------------------------------------------------------------------
+made by 경민
+*/
+
+.twit-comment {
+  background-color: #d3d3d3;
+  border: 1px solid silver;
+  border-radius: 4px;
+  padding: 10px;
+  position: relative;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.comment {
+  width: 100%; min-height: 72px;
+}
+#comment-btn {
+  float: right;
+  color: white;
+  background: blue;
+  border: none;
+  height: 30px;
+  font-size : 20;
+
+}
+.comment-form {
+  border-bottom: 1px solid silver;
+  padding: 10px;
+  background: #d3d3d3;
+  overflow: hidden;
+}
+
+/*
+-----------------------------------------------------------------------------------------------------------
+made by 태현
+*/
+
+.twit-picture {
+  border: 3px solid silver;
+  border-radius: 4px;
+  padding: 10px;
+  width: 280px;
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.twit-emote{
+  display: flex;
+  float: right;
+}
+
+
+.like{
+  color: white;
+  background: white;
+  border: none;
+}
+.hate{
+  color: white;
+  background: white;
+  border: none;
+}
