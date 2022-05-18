@@ -3,22 +3,26 @@
 {% block content %}
     <div class="timeline">
       {% if user %}
-        <div>
-          <form id="twit-form" action="/post" method="post" enctype="multipart/form-data">
-            <div class="input-group">
-              <textarea id="twit" name="content" maxlength="140"></textarea>
-            </div>
-            <div class="img-preview">
-              <img id="img-preview" src="" style="display: none;" width="250" alt="미리보기">
-              <input id="img-url" type="hidden" name="url">
-            </div>
-            <div>
-              <label id="img-label" for="img">사진 업로드</label>
-              <input id="img" type="file" accept="image/*">
-              <button id="twit-btn" type="submit" class="btn">짹짹</button>
-            </div>
-          </form>
-        </div>
+      <div>
+        <form id="twit-form" action="/post" method="post" enctype="multipart/form-data">
+          <div class="input-group">
+            <textarea id="twit" name="content" maxlength="140"></textarea>
+          </div>
+          <div class="img-preview">
+            <img id="img-preview" src="" style="display: none;" width="250" alt="미리보기">
+            <input id="img-url" type="hidden" name="url">
+          </div>
+          <div>
+            <label id="img-label" for="img">사진 업로드</label>
+            <input id="img" type="file" accept="image/*">
+            <button id="twit-btn" type="submit" class="btn">짹짹</button>
+            <input type="radio" id="PUBLIC" name="scope" value="PUBLIC" checked="checked"/>
+            <label for="PUBLIC">공개</label>
+            <input type="radio" id="PRIVATE" name="scope" value="PRIVATE" />
+            <label for="PRIVATE">비공개</label>
+          </div>
+        </form>
+      </div>
       {% endif %}
       <div class="twits">
         <form id="since-form" action="/since">
@@ -56,9 +60,32 @@
                 <div>{{twit.hate}}</div>
                 {% endif %}
               </div>
-          </div>
+            </div>
             {% if twit.img %}
               <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
+            {% endif %}
+          </div>
+          <div class="twit-comment" id="{{twit.id}}comment">
+              
+              <div class="twit">
+                <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
+                <input type="hidden" value="{{twit.id}}" class="twit-id">
+                <div class="twit-author">작성자<div>날짜<button>X</button></div></div>
+                <div class="twit-content">안녕하세요 콘텐츠내용이에용
+                </div>
+              </div>
+              
+            {% if user %}
+            <div>
+              <form class="comment-form">
+                <div class="comment-input-group">
+                  <div class="twit-author">{{user.nick}}</div><textarea class="comment" name="content" maxlength="140"></textarea>
+                </div>
+                <div>
+                  <button id="comment-btn" type="submit" class="btn">답글작성</button>
+                </div>
+              </form>
+            </div>
             {% endif %}
           </div>
         {% endfor %}
