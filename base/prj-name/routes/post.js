@@ -129,7 +129,7 @@ router.post('/comment', isLoggedIn, upload2.none(), async (req, res, next) => {
     const comment = await Comment.create({
       content: req.body.content,
       PostId: req.body.postId,
-      UserId: req.body.userId,
+      UserId: req.user.id,
     });
     res.redirect('/');
   } catch (error) {
@@ -138,22 +138,8 @@ router.post('/comment', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
-router.post('/comment', isLoggedIn, upload2.none(), async (req, res, next) => {
-  try {//댓글 등록
-    const comment = await Comment.create({
-      content: req.body.content,
-      PostId: req.body.postId,
-      UserId: req.body.userId,
-    });
-    res.redirect('/');
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
-
-router.delete('/comment', isLoggedIn, upload2.none(), async (req, res, next) => {
-  try {//댓글 등록
+router.post('/comment/delete', isLoggedIn, upload2.none(), async (req, res, next) => {
+  try {//댓글 삭제
     await Comment.destroy({where: {id:req.body.commentId}});
     res.redirect('/');
   } catch (error) {
