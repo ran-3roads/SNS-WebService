@@ -63,5 +63,26 @@ router.get('/hashtag', async (req, res, next) => {
     return next(error);
   }
 });
+router.get('/since', async (req, res, next) => {
+  const query = req.query.sinceDate;
+  console.log(query);
+  if (!query) {
+    return res.redirect('/');
+  }
+  try {
+    const sincedate = await Post.findAll({ where: { sinceDate: query } });
+    let posts = [];
+    if (sincedate) {
+      posts = await sincedate;
+    }
+    return res.render('main', {
+      title: `${query} | NodeBird`,
+      twits: posts,
+    });
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
 
 module.exports = router;

@@ -21,6 +21,14 @@
         </div>
       {% endif %}
       <div class="twits">
+        <form id="since-form" action="/since">
+          <input
+          type="date"
+          name="sinceDate"
+          placeholder="date placeholder"
+          />
+          <button class="btn">검색</button>
+        </form>
         <form id="hashtag-form" action="/hashtag">
           <input type="text" name="hashtag" placeholder="태그 검색">
           <button class="btn">검색</button>
@@ -47,9 +55,6 @@
                 <img class="hate" src="/images/hate.png" width="30px" alt="싫어요">
                 <div>{{twit.hate}}</div>
                 {% endif %}
-              </div>
-              <div class="twit-since">
-                {{twit.sinceDate}}
               </div>
           </div>
             {% if twit.img %}
