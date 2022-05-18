@@ -129,8 +129,15 @@ made by 경민
   margin-bottom: 10px;
 }
 
+.commentwrite
+  { width: 100%; min-height: 72px; }
+
 .comment {
-  width: 100%; min-height: 72px;
+  border: 1px solid silver;
+  border-radius: 4px;
+  padding: 10px;
+  position: relative;
+  margin-bottom: 10px;
 }
 #comment-btn {
   float: right;
