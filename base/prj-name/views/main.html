@@ -66,18 +66,20 @@
             {% endif %}
           </div>
           <div class="twit-comment" id="{{twit.id}}comment">
-              
-              <div class="twit">
-                <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
-                <input type="hidden" value="{{twit.id}}" class="twit-id">
-                <div class="twit-author">작성자<div>날짜<button>X</button></div></div>
-                <div class="twit-content">안녕하세요 콘텐츠내용이에용
+              {% for cmt in twit.Comments%}
+              <div class="comment">
+                <input type="hidden" value="{{cmt.User.id}}" class="comment-user-id">
+                <input type="hidden" value="{{cmt.id}}" class="comment-id">
+                <button class="comment-delete">X</button>
+                <div class="twit-author">{{cmt.User.nick}}</div>
+                <div class="twit-content">{{cmt.content}}
                 </div>
               </div>
-              
+              {% endfor %}
             {% if user %}
             <div>
-              <form class="comment-form">
+              <form class="comment-form" action="/post/comment" method="post">
+                <input name="postId" type="hidden" value="{{twit.id}}" class="twit-id">
                 <div class="comment-input-group">
                   <div class="twit-author">{{user.nick}}</div><textarea class="comment" name="content" maxlength="140"></textarea>
                 </div>
@@ -158,7 +160,30 @@
     });
   });
 
+  document.querySelectorAll('.comment-delete').forEach(function (tag) {
+    const commentId = tag.parentNode.querySelector('.comment-id').value;
+    const userId = tag.parentNode.querySelector('.comment-user-id').value;
+    tag.addEventListener('click', function () {
+      console.log("test",commentId,userId)
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        if (userId === myId.value) {
+          if (confirm('댓글을 삭제하시겠습니까?')) {
+            console.log("test2",commentId,userId)
+            axios.post(`/post/comment/delete`, {
+            commentId: commentId
+          })
+              .then(() => {
+                location.reload();
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
+        }
+      }});
+  });
 
-
+    
 </script>
 {% endblock %}
