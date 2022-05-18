@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Emotion extends Sequelize.Model {
+module.exports = class Emotion extends Sequelize.Model {//감정표현 객체 
   static init(sequelize) {
     return super.init({
-        emotion: {
+        emotion: {//감정표현 상태
         type: Sequelize.STRING(140),
         allowNull: false,
       },
@@ -19,7 +19,7 @@ module.exports = class Emotion extends Sequelize.Model {
     });
   }
 
-  static associate(db) {
+  static associate(db) {//foreign key둘
     db.Emotion.belongsTo(db.Post);
     db.Emotion.belongsTo(db.User);
   }
