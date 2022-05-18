@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const Emote = require('../common/emote');
 
-const { Post, Hashtag, Emotion } = require('../models');
+const { Post, Hashtag, Emotion, Comment } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -110,7 +110,7 @@ router.post('/hate', isLoggedIn, upload2.none(), async (req, res, next) => {
     if(emotion[1]){
       await post.increment({hate:1});
     }
-    else if(!emotion[1] && emotion[0].emotion==Emote.LIke){
+    else if(!emotion[1] && emotion[0].emotion==Emote.LIKE){
       await emotion[0].update({emotion:Emote.HATE});
       await post.increment({hate:1});
       await post.decrement({like:1});
@@ -121,6 +121,41 @@ router.post('/hate', isLoggedIn, upload2.none(), async (req, res, next) => {
 
     }
       res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post('/comment', isLoggedIn, upload2.none(), async (req, res, next) => {
+  try {//댓글 등록
+    console.log(req.user);
+    const comment = await Comment.create({
+      content: req.body.content,
+      PostId: req.body.postId,
+      UserId: req.user.id,
+    });
+    res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post('/comment/delete', isLoggedIn, upload2.none(), async (req, res, next) => {
+  try {//댓글 삭제
+    await Comment.destroy({where: {id:req.body.commentId}});
+    res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.delete('/', isLoggedIn, upload2.none(), async (req, res, next) => {
+  try {//댓글 등록
+    await Post.destroy({where: {id:req.body.postId}});
+    res.redirect('/');
   } catch (error) {
     console.error(error);
     next(error);
