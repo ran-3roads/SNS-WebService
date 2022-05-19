@@ -22,6 +22,26 @@ router.get('/join', isNotLoggedIn, (req, res) => {
   res.render('join', { title: 'Join to - prj-name' });
 });
 
+// router.get('/photoBook', async (req, res, next) => {
+//   try {
+//     console.log("실행됨");
+//     if (req.user != undefined) {
+//       const imgPosts = await Post.findAll({
+//         where: {img:{[Op.ne]: null},UserId: req.user.id},
+//         order: [['createdAt', 'DESC']],
+//         attributes: ['img','id'],
+//       });
+//       res.render('layout', {
+//         title: 'prj-name',
+//         imgPosts: imgPosts,
+//       });
+//     }
+//   } catch (err) {
+//     console.error(err);
+//     next(err);
+//   }
+// });
+
 router.get('/', async (req, res, next) => {
   try {
     const posts = await Post.findAll({
@@ -41,7 +61,12 @@ router.get('/', async (req, res, next) => {
     });
     if (req.user != undefined) {
       const imgPosts = await Post.findAll({
-        where: {img:{[Op.ne]: null},UserId: req.user.id},
+        where: {
+          img:{
+            [Op.ne]: null
+          },
+          UserId: req.user.id
+        },
         order: [['createdAt', 'DESC']],
         attributes: ['img','id'],
       });
@@ -114,9 +139,6 @@ router.get('/img', async (req, res, next) => {
     return res.redirect('/');
   }
   try {
-    Post.findAll({
-      include
-    })
     const post = await Post.findOne(
       { include: [{
         model: User,
