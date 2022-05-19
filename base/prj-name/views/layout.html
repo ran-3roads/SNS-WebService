@@ -41,12 +41,15 @@
         {% endif %}
         </div>
         <h1>사진첩</h1>
-        <div id = "twit-picture" class="twit-picture" action="/photoBook">
-          {% if imgPosts %}
+        <div class = "twit-picture">
           {% for imgPost in imgPosts %}
-          <div class="twit-img"><img src="{{imgPost.img}}" width=30%></div>
+          {% if imgPost.img %}
+          <form class="twit-imgSearch"action="/img" method="get">
+            <input type="hidden" name="post" value="{{imgPost.id}}">
+            <input type="image" src="{{imgPost.img}}" width=30%>
+          </form>
+          {% endif %}
           {% endfor %}
-          {% endif %} 
         </div>
 
         <footer>
@@ -62,11 +65,7 @@
         if (new URL(location.href).searchParams.get('loginError')) {
           alert(new URL(location.href).searchParams.get('loginError'));
         }
-      };
-    </script>
-    <script>
-      
-    </script>
+      }; </script>
     {% block script %}
     {% endblock %}
   </body>

@@ -139,7 +139,7 @@ router.get('/img', async (req, res, next) => {
     return res.redirect('/');
   }
   try {
-    const post = await Post.findOne(
+    const post = await Post.findAll(
       { include: [{
         model: User,
         attributes: ['id', 'nick'],
