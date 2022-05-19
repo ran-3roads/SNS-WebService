@@ -66,11 +66,11 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
 router.post('/like', isLoggedIn, upload2.none(), async (req, res, next) => {//좋아요 눌렀을때
   try {//json처리할때 꼭 req.body 꼬옥 붙혀야함
     const emotion = await Emotion.findOrCreate({//값을 있으면 추가를하고 없으면 안함 
-      where: { PostId: req.body.postId, UserId: req.body.userId },//여기있는 부분 찾고
+      where: { PostId: req.body.postId, UserId: req.user.id },//여기있는 부분 찾고
       defaults: {//위에 찾는 내용 없으면 defaults값으로 create
         emotion: Emote.LIKE,
         PostId: req.body.postId,
-        UserId: req.body.userId,
+        UserId: req.user.id,
       },
     });
     const post = await Post.findByPk(req.body.postId);
@@ -96,13 +96,12 @@ router.post('/like', isLoggedIn, upload2.none(), async (req, res, next) => {//�
 
 router.post('/hate', isLoggedIn, upload2.none(), async (req, res, next) => {
   try {
-    Emotion.find
     const emotion = await Emotion.findOrCreate({
-      where: { PostId: req.body.postId, UserId: req.body.userId},
+      where: { PostId: req.body.postId, UserId: req.user.id},
       defaults: {
         emotion: Emote.HATE,
         PostId: req.body.postId,
-        UserId: req.body.userId,
+        UserId: req.user.id,
       },
     });
     const post = await Post.findByPk(req.body.postId);
