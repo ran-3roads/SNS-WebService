@@ -45,25 +45,24 @@ router.get('/join', isNotLoggedIn, (req, res) => {
 router.get('/', async (req, res, next) => {
   try {
     const posts = await Post.findAll({
-      include: [{
+      include: [{//연관관계인 user도 포함시킴 
         model: User,
         attributes: ['id', 'nick'],
       }, {
-        model: Comment,
+        model: Comment,//연관관계인 Comment들을 포함시킴 
         include: [{
           model: User,
           attributes: ['id', 'nick'],
         }],
-        //        attributes: [], 사용해보고 필요없느거 있으면 그때 제외
-        order: [['createdAt', 'DESC']],
+        order: [['createdAt', 'DESC']],//날짜순 정렬
       }],
-      order: [['createdAt', 'DESC']],
+      order: [['createdAt', 'DESC']],//날짜순 정렬 
     });
-    if (req.user != undefined) {
+    if (req.user != undefined) {//유저 로그인되어있는지 여부 확인
       const imgPosts = await Post.findAll({
         where: {
           img:{
-            [Op.ne]: null
+            [Op.ne]: null//null이 아닌것만 검색
           },
           UserId: req.user.id
         },
@@ -73,7 +72,7 @@ router.get('/', async (req, res, next) => {
       res.render('main', {
         title: 'prj-name',
         twits: posts,
-        imgPosts: imgPosts,
+        imgPosts: imgPosts,//이미지가 있는 포스트 배열
       });
     }
     else {

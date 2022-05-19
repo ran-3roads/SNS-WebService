@@ -76,17 +76,17 @@ router.post('/like', isLoggedIn, upload2.none(), async (req, res, next) => {//�
       },
     });
     const post = await Post.findByPk(req.body.postId);
-    if(emotion[1]){
-      await post.increment({like:1});
+    if(emotion[1]){//처음 생성할때 
+      await post.increment({like:1}); //좋아요 갯수 증가 
     }
     else if(!emotion[1] && emotion[0].emotion==Emote.HATE){
-      await emotion[0].update({emotion:Emote.LIKE});
+      await emotion[0].update({emotion:Emote.LIKE});//좋아요로 상태 변경
       await post.increment({like:1});
-      await post.decrement({hate:1});
+      await post.decrement({hate:1});// 싫어요 갯수 감소 
     }
     else{
-      emotion[0].destroy();
-      await post.decrement({like:1});
+      emotion[0].destroy();//좋아요 삭제 
+      await post.decrement({like:1});//좋아요 갯수 감소
 
     }
       res.redirect('/');
@@ -129,8 +129,7 @@ router.post('/hate', isLoggedIn, upload2.none(), async (req, res, next) => {
 
 router.post('/comment', isLoggedIn, upload2.none(), async (req, res, next) => {
   try {//댓글 등록
-    console.log(req.user);
-    const comment = await Comment.create({
+    const comment = await Comment.create({//댓글생성 
       content: req.body.content,
       PostId: req.body.postId,
       UserId: req.body.userId,

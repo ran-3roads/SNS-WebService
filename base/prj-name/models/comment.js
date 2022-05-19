@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Comment extends Sequelize.Model {//감정표현 객체 
+module.exports = class Comment extends Sequelize.Model {//댓글 모델
   static init(sequelize) {
     return super.init({
-      content: {
+      content: {//댓글내용
         type: Sequelize.STRING(140),
         allowNull: false,
       },
