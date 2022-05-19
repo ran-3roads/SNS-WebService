@@ -43,12 +43,10 @@
         <h1>사진첩</h1>
         <div class = "twit-picture">
           {% for imgPost in imgPosts %}
-          {% if imgPost.img %}
-          <form class="twit-imgSearch"action="/img" method="get">
+           <form class="twit-imgSearch"action="/img" method="get">
             <input type="hidden" name="post" value="{{imgPost.id}}">
             <input type="image" src="{{imgPost.img}}" width=30%>
           </form>
-          {% endif %}
           {% endfor %}
         </div>
 
