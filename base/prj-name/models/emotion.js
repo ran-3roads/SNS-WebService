@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Emotion extends Sequelize.Model {//감정표현 객체 
+module.exports = class Emotion extends Sequelize.Model {//감정표현 모델
   static init(sequelize) {
     return super.init({
         emotion: {//감정표현 상태

@@ -12,7 +12,8 @@ const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
-const { sequelize } = require('./models');
+const { sequelize } = require('./models');// /models/index
+//구조 분해 할당으로 db에서 sequelize 프로퍼티를 변수에 할당한다
 const passportConfig = require('./passport');
 
 const app = express();
@@ -23,7 +24,7 @@ nunjucks.configure('views', {
   express: app,
   watch: true,
 });
-sequelize.sync({ force: false })
+sequelize.sync({ force: false })//sequelize연동을 한다.
   .then(() => {
     console.log('데이터베이스 연결 성공');
   })
@@ -33,9 +34,9 @@ sequelize.sync({ force: false })
 
 
 app.use(morgan('dev'));
+//정적인 파일들 매핑을 도와주는 미들웨어 static사용
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/img', express.static(path.join(__dirname, 'uploads')));
-app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -50,7 +51,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
+//router들 등록
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
 app.use('/post', postRouter);
