@@ -58,6 +58,7 @@
           {% endif %}
         </div>
       </div>
+      <button class="post-delete">글 삭제</button>
       {% if twit.img %}
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
@@ -113,6 +114,7 @@
           {% endif %}
         </div>
       </div>
+      <button class="post-delete">글 삭제</button>
       {% if twit.img %}
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
@@ -147,7 +149,6 @@
     {% endif %}
     {% endfor %}
   </div>
-</div>
 {% endblock %}
 
 {% block script %}
@@ -208,7 +209,9 @@
     const userId = tag.parentNode.parentNode.parentNode.querySelector('.twit-user-id').value;
     tag.addEventListener('click', function () {
       event.stopPropagation();
-      axios.post(`/post/like`, {
+      if(confirm('좋아요를 누르시겠습니까?'))
+      {
+        axios.post(`/post/like`, {
         userId: userId,
         postId: postId
       })
@@ -218,7 +221,7 @@
         .catch((err) => {
           console.error(err);
         });
-      alert("따봉!");
+      }
     });
   });
   
@@ -227,7 +230,8 @@
     const userId = tag.parentNode.parentNode.parentNode.querySelector('.twit-user-id').value;
     tag.addEventListener('click', function () {
       event.stopPropagation();
-      axios.post(`/post/hate`, {
+      if(confirm('싫어요를 누르시겠습니까?')){
+        axios.post(`/post/hate`, {
         userId: userId,
         postId: postId
       })
@@ -237,7 +241,7 @@
         .catch((err) => {
           console.error(err);
         });
-      alert("싫어용!");
+      }
     });
   });
 
@@ -253,6 +257,31 @@
             console.log("test2",commentId,userId)
             axios.post(`/post/comment/delete`, {
             commentId: commentId
+          })
+              .then(() => {
+                location.reload();
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
+        }
+        else {
+          alert("작성자가 아닙니다.")
+        }
+      }});
+  });
+
+  document.querySelectorAll('.post-delete').forEach(function (tag) {
+    const postId = tag.parentNode.querySelector('.twit-id').value;
+    const userId = tag.parentNode.querySelector('.twit-user-id').value;
+    tag.addEventListener('click', function () {
+      const myId = document.querySelector('#my-id');
+      if (myId) {
+        if (userId === myId.value) {
+          if (confirm('글을 삭제하시겠습니까?')) {
+            axios.post(`/post/delete`, {
+            postId: postId
           })
               .then(() => {
                 location.reload();
