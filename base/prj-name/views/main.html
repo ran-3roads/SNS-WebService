@@ -90,7 +90,7 @@
           </div>
           {% endif %}
     {% if twit.scope === "PRIVATE" %}
-    {%  if followerIdList.includes(twit.User.id) or twit.User.id == user.id %}
+    {%  if followerIdList.includes(twit.User.id) or twit.User.id === user.id %}
     <div class="twit">
       <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
       <input type="hidden" value="{{twit.id}}" class="twit-id">
@@ -101,15 +101,15 @@
       <div class="twit-content">{{twit.content}}
         <div class="twit-emote">
           {% if twit.like === 0 %}
-          <img class="like" src="public/images/like.png" width="30px" alt="좋아요">
+          <img class="like" src="/images/like.png" width="30px" alt="좋아요">
           {% else %}
-          <img class="like" src="public/images/like.png" width="30px" alt="좋아요">
+          <img class="like" src="/images/like.png" width="30px" alt="좋아요">
           <div>{{twit.like}}</div>
           {% endif %}
           {% if twit.hate === 0 %}
-          <img class="hate" src="public/images/hate.png" width="30px" alt="싫어요">
+          <img class="hate" src="/images/hate.png" width="30px" alt="싫어요">
           {% else %}
-          <img class="hate" src="public/images/hate.png" width="30px" alt="싫어요">
+          <img class="hate" src="/images/hate.png" width="30px" alt="싫어요">
           <div>{{twit.hate}}</div>
           {% endif %}
         </div>
@@ -119,7 +119,7 @@
       <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
       {% endif %}
     </div>
-    <div class="twit-comment" id="{{twit.id}}comment">
+    <div class="twit-comment" id="{{twit.id}}comment" style="display:none;">
               {% for cmt in twit.Comments%}
               <div class="comment">
                 <input type="hidden" value="{{cmt.User.id}}" class="comment-user-id">
@@ -145,9 +145,9 @@
             {% endif %}
           </div>
           {% endif %}
-    </div>
     {% endif %}
     {% endfor %}
+  </div>
   </div>
 {% endblock %}
 
@@ -209,9 +209,7 @@
     const userId = tag.parentNode.parentNode.parentNode.querySelector('.twit-user-id').value;
     tag.addEventListener('click', function () {
       event.stopPropagation();
-      if(confirm('좋아요를 누르시겠습니까?'))
-      {
-        axios.post(`/post/like`, {
+      axios.post(`/post/like`, {
         userId: userId,
         postId: postId
       })
@@ -220,8 +218,7 @@
         })
         .catch((err) => {
           console.error(err);
-        });
-      }
+        });   
     });
   });
   
@@ -230,7 +227,6 @@
     const userId = tag.parentNode.parentNode.parentNode.querySelector('.twit-user-id').value;
     tag.addEventListener('click', function () {
       event.stopPropagation();
-      if(confirm('싫어요를 누르시겠습니까?')){
         axios.post(`/post/hate`, {
         userId: userId,
         postId: postId
@@ -241,7 +237,6 @@
         .catch((err) => {
           console.error(err);
         });
-      }
     });
   });
 
@@ -276,6 +271,7 @@
     const postId = tag.parentNode.querySelector('.twit-id').value;
     const userId = tag.parentNode.querySelector('.twit-user-id').value;
     tag.addEventListener('click', function () {
+      event.stopPropagation();
       const myId = document.querySelector('#my-id');
       if (myId) {
         if (userId === myId.value) {
