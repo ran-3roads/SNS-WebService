@@ -153,11 +153,23 @@ router.get('/img', async (req, res, next) => {
       }],
         where : {id:query},
       });
+      const imgPosts = await Post.findAll({
+        where: {
+          img:{
+            [Op.ne]: null//null이 아닌것만 검색
+          },
+          UserId: req.user.id
+        },
+        order: [['createdAt', 'DESC']],
+        attributes: ['img','id'],
+      });
+
     
 
     return res.render('main', {
       title: `${query} | NodeBird`,
       twits: post,
+      imgPosts: imgPosts,//이미지가 있는 포스트 배열
     });
   } catch (error) {
     console.error(error);
