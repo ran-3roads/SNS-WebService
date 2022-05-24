@@ -107,11 +107,29 @@ router.get('/hashtag', async (req, res, next) => {
         p.formatDate = new Date(p.createdAt).toLocaleString();
       });
     }
-
+    if (req.user != undefined) {//유저 로그인되어있는지 여부 확인
+      const imgPosts = await Post.findAll({
+        where: {
+          img:{
+            [Op.ne]: null//null이 아닌것만 검색
+          },
+          UserId: req.user.id
+        },
+        order: [['createdAt', 'DESC']],
+        attributes: ['img','id'],
+      });
+      return res.render('main', {
+        title: `${query} | NodeBird`,
+        twits: posts,
+        imgPosts: imgPosts,//이미지가 있는 포스트 배열
+      });
+    }
+    else{
     return res.render('main', {
       title: `${query} | NodeBird`,
       twits: posts,
     });
+  }
   } catch (error) {
     console.error(error);
     return next(error);
@@ -132,10 +150,29 @@ router.get('/since', async (req, res, next) => {
         p.formatDate = new Date(p.createdAt).toLocaleString();
       });
     }
+    if (req.user != undefined) {//유저 로그인되어있는지 여부 확인
+    const imgPosts = await Post.findAll({
+      where: {
+        img:{
+          [Op.ne]: null//null이 아닌것만 검색
+        },
+        UserId: req.user.id
+      },
+      order: [['createdAt', 'DESC']],
+      attributes: ['img','id'],
+    });
     return res.render('main', {
       title: `${query} | NodeBird`,
       twits: posts,
+      imgPosts: imgPosts,//이미지가 있는 포스트 배열
     });
+  }
+  else{
+  return res.render('main', {
+    title: `${query} | NodeBird`,
+    twits: posts,
+  });
+}
   } catch (error) {
     console.error(error);
     return next(error);
