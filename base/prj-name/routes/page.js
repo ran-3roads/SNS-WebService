@@ -101,8 +101,11 @@ router.get('/hashtag', async (req, res, next) => {
   try {
     const hashtag = await Hashtag.findOne({ where: { title: query } });
     let posts = [];
-    if (hashtag) {
+    if (hashtag) {      
       posts = await hashtag.getPosts({ include: [{ model: User }] });
+      posts.forEach(p=>{
+        p.formatDate = new Date(p.createdAt).toLocaleString();
+      });
     }
 
     return res.render('main', {
@@ -125,6 +128,9 @@ router.get('/since', async (req, res, next) => {
     let posts = [];
     if (sincedate) {
       posts = await sincedate;
+      posts.forEach(p=>{
+        p.formatDate = new Date(p.createdAt).toLocaleString();
+      });
     }
     return res.render('main', {
       title: `${query} | NodeBird`,
