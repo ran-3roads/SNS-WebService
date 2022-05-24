@@ -117,7 +117,7 @@ router.get('/since', async (req, res, next) => {
     return res.redirect('/');
   }
   try {
-    const sincedate = await Post.findAll({ where: { sinceDate: query } });
+    const sincedate = await Post.findAll({ where: { sinceDate: query },include: [{ model: User }] });
     let posts = [];
     if (sincedate) {
       posts = await sincedate;
