@@ -58,6 +58,10 @@ router.get('/', async (req, res, next) => {
       }],
       order: [['createdAt', 'DESC']],//날짜순 정렬 
     });
+    posts.forEach(p=>{
+      p.formatDate = new Date(p.createdAt).toLocaleString();
+    }
+    );
     if (req.user != undefined) {//유저 로그인되어있는지 여부 확인
       const imgPosts = await Post.findAll({
         where: {
